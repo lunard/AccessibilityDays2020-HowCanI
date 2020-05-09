@@ -1,0 +1,7 @@
+.voiceAssistantContainer{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: space-between;
+}
