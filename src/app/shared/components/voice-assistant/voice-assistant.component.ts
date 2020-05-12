@@ -12,6 +12,7 @@ import { SpeechServiceService } from '../../services/speech-service.service';
 })
 export class VoiceAssistantComponent implements OnInit {
 
+  isListening: boolean = false;
   recognizedText: string = "";
 
   color: ThemePalette = 'primary';
@@ -22,25 +23,31 @@ export class VoiceAssistantComponent implements OnInit {
 
 
   async ngOnInit() {
+    setInterval(async () => {
       await this.startRecognizer();
+    }, 4000);
   }
 
-  private async startRecognizer(){
-    await this.speechServiceService.startRecognizer((txt) => {
-      if (!txt){
-        this.color = 'primary';
-        this.stopProgress();
+  private async startRecognizer() {
+    if (!this.isListening) {
+      await this.speechServiceService.startRecognizer((txt) => {
+        if (!txt) {
+          this.isListening = false;
+          this.color = 'primary';
+          this.stopProgress();
 
-        setTimeout(async () => {
-          await this.startRecognizer();
-        }, 500);
-      }
-      else{
-        this.color = 'warn';
-        this.startProgress();
-        this.recognizedText = txt;
-      }
-    });
+          setTimeout(async () => {
+            await this.startRecognizer();
+          }, 500);
+        }
+        else {
+          this.isListening = true;
+          this.color = 'warn';
+          this.startProgress();
+          this.recognizedText = txt;
+        }
+      });
+    }
   }
 
   private stopProgress() {
