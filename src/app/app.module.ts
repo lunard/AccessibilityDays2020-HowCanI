@@ -12,10 +12,16 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
+import { HttpClientModule } from '@angular/common/http';
+
+import { CommonModule } from '@angular/common';
+
+
 @NgModule({
   declarations: [
     AppComponent,
     VoiceAssistantComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -24,7 +30,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatSliderModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    MatButtonModule   
+    MatButtonModule,
+    CommonModule,
+    HttpClientModule   
   ],
   providers: [],
   bootstrap: [AppComponent] 

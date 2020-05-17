@@ -3,6 +3,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { ThemePalette } from '@angular/material/core';
 import { SpeechServiceService } from '../../services/speech-service.service';
+import { LuisServiceService } from '../../services/luis-service.service';
 
 @Component({
   selector: 'app-voice-assistant',
@@ -14,12 +15,15 @@ export class VoiceAssistantComponent implements OnInit {
 
   isListening: boolean = false;
   recognizedText: string = "";
+  prediction: string = "";
 
   color: ThemePalette = 'primary';
   mode: ProgressSpinnerMode = 'determinate';
   @ViewChild('spinner', { static: false }) spinner: MatProgressSpinner;
 
-  constructor(private speechServiceService: SpeechServiceService) { }
+  constructor(
+    private speechServiceService: SpeechServiceService,
+    private luisServiceService: LuisServiceService) { }
 
 
   async ngOnInit() {
@@ -36,9 +40,15 @@ export class VoiceAssistantComponent implements OnInit {
           this.color = 'primary';
           this.stopProgress();
 
-          setTimeout(async () => {
-            await this.startRecognizer();
-          }, 500);
+          // launch luis
+          this.luisServiceService.GetLuisPrediction(this.recognizedText).subscribe((prediction) => {
+            this.prediction = prediction;
+            console.log(this.recognizedText)
+          });
+
+          // setTimeout(async () => {
+          //   await this.startRecognizer();
+          // }, 500);
         }
         else {
           this.isListening = true;
